@@ -1,0 +1,80 @@
+<p-fluid>
+
+
+    <form class="flex mt-8" [formGroup]="formGroup" (ngSubmit)="registrarUsuario()">
+    <div class="card flex flex-col gap-6 w-full">
+                <div class="font-semibold text-xl">Registrar Usuario</div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="firstname2">name</label>
+                        <input pInputText id="name" type="text" formControlName="name" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="lastname2">email</label>
+                        <input pInputText id="email" type="text" formControlName="email" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="firstname2">password</label>
+                        <input pInputText id="password" type="text" formControlName="password" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="lastname2">password_confirmation</label>
+                        <input pInputText id="password_confirmation" type="text" formControlName="password_confirmation" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="firstname2">telefono</label>
+                        <input pInputText id="telefono" formControlName="telefono" type="text" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="rol">rol</label>
+                        <p-select id="rol" [options]="roles" formControlName="rol" placeholder="Select One" class="w-full" (onChange)="rolSeleccionado($event)"></p-select>
+                    </div>
+                </div>
+                @if(formGroup.controls.rol.value=="medico"){
+                    <div formGroupName="tipo" class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="firstname2">reg_profesional</label>
+                        <input pInputText id="reg_profesional" formControlName="reg_profesional" type="text" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="especialidad_id">especialidad_id</label>
+                        <p-select id="especialidad_id" [options]="especialidades" formControlName="especialidad_id" optionValue="id" optionLabel="nombre" placeholder="Select One" class="w-full" (onChange)="especialiadChange($event)"></p-select>
+                    </div>
+                </div>
+                }
+                @if(formGroup.controls.rol.value=="paciente"){
+                    <div formGroupName="tipo" class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="nacimiento">nacimiento</label>
+                        <input pInputText id="nacimiento" formControlName="nacimiento" type="text" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="sexo">sexo</label>
+                        <input pInputText id="sexo" formControlName="sexo" type="text" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="direccion">direccion</label>
+                        <input pInputText id="direccion" formControlName="direccion" type="text" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="historial_medico">historial_medico</label>
+                        <input pInputText id="historial_medico" formControlName="historial_medico" type="text" />
+                    </div>
+                    
+                </div>
+                }
+
+                <p-button type="submit" label="Primary" raised />
+
+                
+            </div>
+            </form>
+
+</p-fluid>

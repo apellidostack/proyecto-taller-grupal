@@ -3,6 +3,8 @@ import { AppLayout } from './app/layout/component/app.layout';
 import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Notfound } from './app/pages/notfound/notfound';
 import { authGuard } from '@/pages/auth/auth-guard';
+import { UserForm } from '@/pages/user/components/user-form/user-form';
+import { Users } from '@/pages/user/users/users';
 
 export const appRoutes: Routes = [
     {
@@ -10,7 +12,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: '', component: Dashboard },
+            { path: '', component: Users },
 /*             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') }, */
             //{ path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
