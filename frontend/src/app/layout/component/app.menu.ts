@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
 import { LoginService } from '@/services/login-service';
@@ -47,8 +47,8 @@ export class AppMenu {
                     items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home' }]
                 },
                 {
-                    label: 'Home',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                    label: 'Usuarios',
+                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/admin'] }]
                 },
                 
                 {
@@ -69,8 +69,8 @@ export class AppMenu {
                     items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home' }]
                 },
                 {
-                    label: 'Home',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                    label: 'Usuarios',
+                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/medico'] }]
                 },
                 {
                     label: 'Cerrar Sesion',
@@ -88,6 +88,10 @@ export class AppMenu {
                 {
                     label: 'Usuario',
                     items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home' }]
+                },
+                {
+                    label: 'Reservar Cita',
+                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home', routerLink:['/pages/paciente'] }]
                 },
                 {
                     label: 'Cerrar Sesion',

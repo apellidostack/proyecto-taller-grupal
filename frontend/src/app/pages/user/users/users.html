@@ -1,7 +1,5 @@
-<p-dialog header="Dialog" [(visible)]="display" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '30vw' }" [modal]="true">
+<p-dialog header="" [(visible)]="display" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '70vw' }" [modal]="true">
                     <app-user-form></app-user-form>
-                    <ng-template #footer>
-                        <p-button label="Save" (click)="close()" />
-                    </ng-template>
+                    
                 </p-dialog>
                 <p-button label="Show" [style]="{ width: 'auto' }" (click)="open()" />
