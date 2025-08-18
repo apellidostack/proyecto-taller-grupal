@@ -37,7 +37,15 @@ export class Login {
           console.log(d);
           const sesion=new Sesion(d.user.name,d.user.rol,d.token);
           this.loginService.guardarToken(sesion);
-          this.router.navigateByUrl("")
+          if(d.user.rol=="administrador"){
+            this.router.navigateByUrl("/admin")
+          }else
+          if(d.user.rol=="medico"){
+            this.router.navigateByUrl("/medico")
+          }else
+          if(d.user.rol=="paciente"){
+            this.router.navigateByUrl("/paciente")
+          }
           
         },
         error:(e)=>{

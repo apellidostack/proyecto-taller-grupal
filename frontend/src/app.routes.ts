@@ -5,6 +5,8 @@ import { Notfound } from './app/pages/notfound/notfound';
 import { authGuard } from '@/pages/auth/auth-guard';
 import { UserForm } from '@/pages/user/components/user-form/user-form';
 import { Users } from '@/pages/user/users/users';
+import { ReservarCita } from '@/pages/paciente/reservar-cita/reservar-cita';
+import { CrudCitas } from '@/pages/medico/crud-citas/crud-citas';
 
 export const appRoutes: Routes = [
     {
@@ -12,7 +14,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: '', component: Users },
+            { path: '', component: ReservarCita },
 /*             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') }, */
             //{ path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }

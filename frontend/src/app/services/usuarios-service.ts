@@ -8,9 +8,10 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UsuariosService {
-  private url = environment.ruta+"registrarusuario"
+  private url = environment.ruta+"registrarusuario";
   private http = inject(HttpClient);
   registrarUsuario(user:User):Observable<any>{
     return this.http.post<any>(this.url,user);
   }
+  
 }

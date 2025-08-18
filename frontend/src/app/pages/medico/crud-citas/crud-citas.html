@@ -1,0 +1,51 @@
+<p-table
+  #dt
+  [value]="citas"
+  [rows]="10"
+  [paginator]="true"
+  [rowHover]="true"
+  dataKey="id"
+>
+  <ng-template #header>
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Hora Inicio</th>
+      <th>Hora Final</th>
+      <th>Razón</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-cita>
+    <tr>
+      <td>{{ cita.id }}</td>
+      <td>{{ cita.fecha }}</td>
+      <td>{{ cita.tiempo_inicio }}</td>
+      <td>{{ cita.tiempo_final }}</td>
+      <td>{{ cita.razon }}</td>
+      <td>
+        <p-button
+          label="Ver detalle"
+          icon="pi pi-search"
+          (click)="verDetalle(cita)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Modal de detalle -->
+<p-dialog
+  [(visible)]="mostrarDialogo"
+  [modal]="true"
+  header="Detalle de Cita"
+  [style]="{ width: '400px' }"
+  (onHide)="cerrarDialogo()"
+>
+  <div *ngIf="selectedCita">
+    <p><b>Fecha:</b> {{ selectedCita.fecha }}</p>
+    <p><b>Razón:</b> {{ selectedCita.razon }}</p>
+    <p><b>Paciente:</b> {{ nombrePaciente || 'Cargando...' }}</p>
+  </div>
+</p-dialog>
