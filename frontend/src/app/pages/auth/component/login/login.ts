@@ -38,13 +38,13 @@ export class Login {
           const sesion=new Sesion(d.user.name,d.user.rol,d.token);
           this.loginService.guardarToken(sesion);
           if(d.user.rol=="administrador"){
-            this.router.navigateByUrl("/admin")
+            this.router.navigateByUrl("/pages/admin")
           }else
           if(d.user.rol=="medico"){
-            this.router.navigateByUrl("/medico")
+            this.router.navigateByUrl("/pages/medico")
           }else
           if(d.user.rol=="paciente"){
-            this.router.navigateByUrl("/paciente")
+            this.router.navigateByUrl("/pages/paciente")
           }
           
         },
