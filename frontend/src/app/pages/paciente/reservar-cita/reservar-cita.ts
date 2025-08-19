@@ -22,7 +22,8 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-reservar-cita',
   imports: [InputTextModule,ButtonModule,SelectModule,TableModule,
-    CommonModule,FormsModule,ToastModule,CardModule,ReactiveFormsModule,DatePickerModule,TextareaModule],
+    CommonModule,FormsModule,ToastModule,CardModule,ReactiveFormsModule,
+    DatePickerModule,TextareaModule],
   templateUrl: './reservar-cita.html',
   styleUrl: './reservar-cita.scss',
   providers: [MessageService]
@@ -45,10 +46,10 @@ export class ReservarCita{
     this.formCita = this.fb.group({
       fecha: [null, Validators.required],
       razon: ['', Validators.required],
-      tiempo_inicio: [''],
-      tiempo_final: [''],
+      tiempo_inicio: ['', Validators.required],
+      tiempo_final: ['',Validators.required],
       especialidad_id: [null,Validators.required],
-      horario_id: [''],
+      horario_id: ['',Validators.required],
       paciente_id: ['']
     });
     this.cargarEspecialidad();
@@ -81,35 +82,51 @@ export class ReservarCita{
     this.cargarHorarios(fechaFormateada,this.formCita.get("especialidad_id")?.value);
   }
 
-  onHorarioSeleccionado(horario: any) {
-    this.horarioSeleccionado = horario;
-    this.formCita.get("horario_id")?.setValue(horario.id);
-    if (this.formCita.get('fecha')?.value) {
-      this.calcularHoras();
-      
-    }
-    console.log(this.formCita.value);
-  }
-
-  calcularHoras() {
-    const fecha = this.formCita.get('fecha')?.value;
-    if(this.horarioSeleccionado.duracion_cita&&this.horarioSeleccionado.tiempo_inicio){
-
-      const duracion = this.horarioSeleccionado.duracion_cita?.split(':').map(Number);
-      
-      const [hIni, mIni] = this.horarioSeleccionado.tiempo_inicio?.split(':').map(Number);
-      const fechaInicio = new Date(fecha);
-      fechaInicio.setHours(hIni, mIni);
   
-      const fechaFin = new Date(fechaInicio);
-      fechaFin.setHours(fechaInicio.getHours() + duracion[0], fechaInicio.getMinutes() + duracion[1]);
-      this.formCita.patchValue({
-        tiempo_inicio: fechaInicio.toTimeString().substring(0,5),
-        tiempo_final: fechaFin.toTimeString().substring(0,5)
-      });
-    }
 
+  onHorarioSeleccionado(horario: any) {
+  this.horarioSeleccionado = horario;
+  this.formCita.get("horario_id")?.setValue(horario.id);
+
+  if (this.formCita.get('fecha')?.value) {
+    // usa el inicio por defecto del horario
+    this.formCita.get("tiempo_inicio")?.setValue('');
   }
+  console.log(this.formCita.value);
+}
+
+// nuevo
+onHoraInicioSeleccionada(horaInicio: Date) {
+  if (!this.horarioSeleccionado) return;
+  // ahora llamamos a calcularHoras pasándole la hora elegida
+  this.calcularHoras(horaInicio);
+  console.log(this.formCita.value);
+}
+
+calcularHoras(fechaInicioManual: Date) {
+  const fecha = this.formCita.get('fecha')?.value;
+  if (!fecha || !this.horarioSeleccionado?.duracion_cita || !fechaInicioManual) return;
+
+  const duracion = this.horarioSeleccionado.duracion_cita.split(':').map(Number);
+
+  // usar siempre la fecha/hora de inicio manual
+  const fechaInicio = new Date(fechaInicioManual);
+
+  // calcular fecha fin
+  const fechaFin = new Date(fechaInicio);
+  fechaFin.setHours(
+    fechaInicio.getHours() + duracion[0],
+    fechaInicio.getMinutes() + duracion[1]
+  );
+
+  // actualizar formulario
+  this.formCita.patchValue({
+    tiempo_inicio: fechaInicio.toTimeString().substring(0, 5),
+    tiempo_final: fechaFin.toTimeString().substring(0, 5)
+  });
+}
+
+
 
   reservarCita() {
     const id= this.loginService.token()?.id;
@@ -128,10 +145,16 @@ export class ReservarCita{
       paciente_id: 1
     };
     
-    this.citaService.reservarCita(cita).subscribe(d=>{
+    this.citaService.reservarCita(cita).subscribe({
+      next:d=>{
       console.log(d);
       
       this.messageService.add({severity:'success', summary:'Éxito', detail:'Cita reservada correctamente'});
+    },
+    error:e=>{
+        this.messageService.add({severity:'error', summary:'Error', detail:e.error.message});
+
+      }
     });
 
     console.log('Cita a reservar:', cita);

@@ -57,7 +57,12 @@
                         </div>
                         <div class="flex flex-col grow basis-0 gap-2">
                             <label>Hora Inicio</label>
-                            <input pInputText formControlName="tiempo_inicio" readonly />
+                            <p-date-picker 
+                                formControlName="tiempo_inicio"
+                                [timeOnly]="true"
+                                hourFormat="24"
+                                (onSelect)="onHoraInicioSeleccionada($event)">
+                            </p-date-picker>
                         </div>
                         <div class="flex flex-col grow basis-0 gap-2">
                             <label>Hora Fin</label>
