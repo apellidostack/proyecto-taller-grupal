@@ -36,7 +36,7 @@ export class CitaService {
   }
 
   reservarCita(cita: Cita): Observable<any> {
-    return this.http.post(`${this.apiUrl}/citas`, cita);
+    return this.http.post(`${this.apiUrl}citas`, cita);
   }
 
   verCitas():Observable<any[]>{

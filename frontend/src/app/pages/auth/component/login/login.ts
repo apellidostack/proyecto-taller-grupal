@@ -35,7 +35,7 @@ export class Login {
       this.loginService.login(this.formGroup).subscribe({
         next:(d)=>{
           console.log(d);
-          const sesion=new Sesion(d.user.name,d.user.rol,d.token);
+          const sesion=new Sesion(d.user.name,d.user.rol,d.token,d.user.id);
           this.loginService.guardarToken(sesion);
           if(d.user.rol=="administrador"){
             this.router.navigateByUrl("/pages/admin")
