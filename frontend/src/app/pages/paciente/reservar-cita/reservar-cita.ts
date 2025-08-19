@@ -1,6 +1,6 @@
 import { Cita } from '@/models/cita';
 import { Especialidad } from '@/models/especialidad';
-import { Horario } from '@/models/horario';
+import { Horario, MedicoHorarios } from '@/models/horario';
 import { CitaService } from '@/services/cita-service';
 import { EspecialidadesService } from '@/services/especialidades-service';
 import { HorariosService } from '@/services/horarios-service';
@@ -29,12 +29,13 @@ import { ToastModule } from 'primeng/toast';
 })
 export class ReservarCita{
   formCita!: FormGroup;
-  horarios: Horario[] = [];
+  horarios: MedicoHorarios[] = [];
   horarioSeleccionado!: any;
 
   constructor(
     private fb: FormBuilder,
     private horarioService: HorariosService,
+    private especialidadService: EspecialidadesService,
     private citaService: CitaService,
     private loginService: LoginService,
     private messageService: MessageService,
@@ -46,24 +47,38 @@ export class ReservarCita{
       razon: ['', Validators.required],
       tiempo_inicio: [''],
       tiempo_final: [''],
+      especialidad_id: [null,Validators.required],
       horario_id: [''],
       paciente_id: ['']
     });
-
-    this.cargarHorarios();
+    this.cargarEspecialidad();
   }
 
-  cargarHorarios() {
-    this.horarioService.verHorarios().subscribe({
-      next: (data) => this.horarios = data,
+  cargarHorarios(fecha:string,especialidad_id:number) {
+    this.horarioService.verHorarios(fecha,especialidad_id).subscribe({
+      next: (data) => {
+        this.horarios = data;
+        console.log(data);
+        
+      },
       error: (err) => this.messageService.add({severity:'error', summary:'Error', detail:'No se pudieron cargar los horarios'})
     });
   }
 
-  onFechaSeleccionada() {
-    if (this.horarioSeleccionado) {
-      this.calcularHoras();
-    }
+  especialidades:Especialidad[]=[];
+  cargarEspecialidad(){
+    this.especialidadService.listarEspecialidades().subscribe(d=>{
+      this.especialidades=d;
+    })
+  }
+
+  seleccionado(){
+    if(!this.formCita.get("fecha")?.value || !this.formCita.get("especialidad_id")?.value) return;
+    const fechaISO = new Date(this.formCita.value.fecha);
+    const fechaFormateada = fechaISO.toISOString().split('T')[0];
+    console.log("seleccionado");
+    
+    this.cargarHorarios(fechaFormateada,this.formCita.get("especialidad_id")?.value);
   }
 
   onHorarioSeleccionado(horario: any) {

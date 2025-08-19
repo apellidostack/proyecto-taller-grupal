@@ -9,15 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CitaService {
-  private medicos: any[] = [
-    { id: 1, nombre: 'Dr. Pérez', especialidadId: 1 },
-    { id: 2, nombre: 'Dra. López', especialidadId: 3 },
-    { id: 3, nombre: 'Dr. García', especialidadId: 2 },
-  ];
-
-  getMedicosByEspecialidad(especialidadId: number): Observable<Medico[]> {
-    return of(this.medicos.filter(m => m.especialidadId === especialidadId));
-  }
+  
   private apiUrl = environment.ruta;
 
   constructor(private http: HttpClient) {}
