@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -21,6 +21,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Cita } from '@/models/cita';
 import { CitaService } from '@/services/cita-service';
 import { UsuariosService } from '@/services/usuarios-service';
+import { LoginService } from '@/services/login-service';
 
 @Component({
   selector: 'app-crud-citas',
@@ -41,7 +42,8 @@ import { UsuariosService } from '@/services/usuarios-service';
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule],
+        ConfirmDialogModule,
+      ReactiveFormsModule],
   templateUrl: './crud-citas.html',
   styleUrl: './crud-citas.scss',
   providers: [MessageService, ConfirmationService]
@@ -52,20 +54,30 @@ export class CrudCitas implements OnInit{
   selectedCita!: any | null;
   mostrarDialogo = false;
   nombrePaciente = '';
+  paciente:any;
 
   @ViewChild('dt') dt!: Table;
 
   constructor(
     private citaService: CitaService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private formBuilder: FormBuilder,
+    private loginService: LoginService,
+    private messageService: MessageService,
+
   ) {}
+
+  formGroup!: FormGroup;
 
   ngOnInit() {
     this.cargarCitas();
+    this.formGroup=this.formBuilder.group({
+      historial_medico:['',Validators.required],
+    });
   }
 
   cargarCitas() {
-    this.citaService.verCitas().subscribe(d => {
+    this.citaService.verCitas(1).subscribe(d => {
       console.log(d);
       
       this.citas = d;
@@ -77,7 +89,25 @@ export class CrudCitas implements OnInit{
     this.mostrarDialogo = true;
     this.citaService.citaPorId(cita.paciente_id).subscribe(d=>{
       this.nombrePaciente=d.paciente.user.name;
-    })
+      this.paciente=d;
+      this.formGroup.get("historial_medico")?.setValue(d.paciente.historial_medico);
+      console.log(this.formGroup.get("historial_medico")?.value);
+      
+    });
+  }
+
+  editarHistorial(){
+    if(this.paciente){
+      this.citaService.actualizarHistorial(this.paciente.paciente.id,this.formGroup).subscribe({
+        next:d=>{
+          this.messageService.add({severity:'success', summary:'Éxito', detail:'Se actualizo el historial medico'});
+          this.cerrarDialogo();
+
+        },
+        error: (err) => this.messageService.add({severity:'error', summary:'Error', detail:'No se pudieron cargar los horarios'})
+      });
+
+    }
   }
 
   cerrarDialogo() {

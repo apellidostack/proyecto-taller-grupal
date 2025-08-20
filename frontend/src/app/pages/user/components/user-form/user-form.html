@@ -1,9 +1,15 @@
 <p-fluid>
 
 
-    <form class="flex" [formGroup]="formGroup" (ngSubmit)="registrarUsuario()">
+    <form class="flex" [formGroup]="formGroup" (ngSubmit)="edit?editarUsuario():registrarUsuario()">
     <div class="card flex flex-col gap-6 w-full">
-                <div class="font-semibold text-xl">Registrar Usuario</div>
+        @if (edit) {
+            <div class="font-semibold text-xl">Actualizar Usuario</div>
+            
+        }@else {
+
+            <div class="font-semibold text-xl">Registrar Usuario</div>
+        }
 
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="flex flex-wrap gap-2 w-full">
@@ -16,16 +22,19 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="flex flex-wrap gap-2 w-full">
-                        <label for="firstname2">password</label>
-                        <input pInputText id="password" type="text" formControlName="password" />
+                @if (!edit) {
+
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex flex-wrap gap-2 w-full">
+                            <label for="firstname2">password</label>
+                            <input pInputText id="password" type="text" formControlName="password" />
+                        </div>
+                        <div class="flex flex-wrap gap-2 w-full">
+                            <label for="lastname2">password_confirmation</label>
+                            <input pInputText id="password_confirmation" type="text" formControlName="password_confirmation" />
+                        </div>
                     </div>
-                    <div class="flex flex-wrap gap-2 w-full">
-                        <label for="lastname2">password_confirmation</label>
-                        <input pInputText id="password_confirmation" type="text" formControlName="password_confirmation" />
-                    </div>
-                </div>
+                }
 
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="flex flex-wrap gap-2 w-full">
@@ -76,10 +85,11 @@
                     
                 }
 
-                <p-button type="submit" label="Registrar" raised />
+                <p-button type="submit" label="{{edit?'Editar':'Registrar'}}" raised />
 
                 
             </div>
             </form>
 
 </p-fluid>
+<p-toast></p-toast>

@@ -43,9 +43,19 @@
   [style]="{ width: '400px' }"
   (onHide)="cerrarDialogo()"
 >
-  <div *ngIf="selectedCita">
+@if (selectedCita) {
+  <form [formGroup]="formGroup" (ngSubmit)="editarHistorial()">
     <p><b>Fecha:</b> {{ selectedCita.fecha }}</p>
     <p><b>Razón:</b> {{ selectedCita.razon }}</p>
     <p><b>Paciente:</b> {{ nombrePaciente || 'Cargando...' }}</p>
-  </div>
+    <div class="flex flex-col grow basis-0 gap-2">
+      <label for="Historial">Historial</label>
+      <textarea rows="1" id="Historial" pInputTextarea formControlName="historial_medico"></textarea>
+    </div>
+        <button pButton type="submit" label="Actualizar historial" class="mt-3" ></button>
+
+  </form>
+
+}
 </p-dialog>
+<p-toast></p-toast>

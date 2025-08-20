@@ -2,7 +2,8 @@ import { Cita } from '@/models/cita';
 import { Medico } from '@/models/medico';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { AbstractControl } from '@angular/forms';
+import { map, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -31,11 +32,16 @@ export class CitaService {
     return this.http.post(`${this.apiUrl}citas`, cita);
   }
 
-  verCitas():Observable<any[]>{
-    return this.http.get<any[]>(this.apiUrl+"citas");
+  verCitas(id:number):Observable<any[]>{
+    return this.http.get<any[]>(this.apiUrl+"citas/medico/"+id).pipe(map((d:any)=>d["data"]));
   }
   citaPorId(id:number):Observable<any>{
     return this.http.get<any>(this.apiUrl+"citas/"+id);
+  }
+  actualizarHistorial(id:number, historial:AbstractControl):Observable<any>{
+    console.log(historial.value);
+    
+    return this.http.put<any>(this.apiUrl+"citas/"+id+"/historial",historial.value);
   }
   
 }

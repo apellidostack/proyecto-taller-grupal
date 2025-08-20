@@ -13,5 +13,16 @@ export class UsuariosService {
   registrarUsuario(user:User):Observable<any>{
     return this.http.post<any>(this.url,user);
   }
+
+  verUsuarios():Observable<any[]>{
+    return this.http.get<any[]>(environment.ruta+"usuarios");
+  }
+  editarUsuario(id:number,user:User):Observable<any[]>{
+    return this.http.put<any[]>(environment.ruta+"usuarios/"+id,user);
+  }
+  eliminarUsuario(id:number):Observable<any[]>{
+    return this.http.delete<any[]>(environment.ruta+"usuarios/"+id);
+  }
+  
   
 }

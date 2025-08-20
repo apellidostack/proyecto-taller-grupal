@@ -1,5 +1,98 @@
-<p-dialog header="" [(visible)]="display" [breakpoints]="{ '960px': '30vw' }" [style]="{ width: '70vw' }" [modal]="true">
-                    <app-user-form></app-user-form>
-                    
-                </p-dialog>
-                <p-button label="Show" [style]="{ width: 'auto' }" (click)="open()" />
+<!-- Modal con tu formulario de usuario -->
+<p-dialog header="Usuario" [(visible)]="display" [breakpoints]="{ '960px': '30vw' }" 
+          [style]="{ width: '70vw' }" [modal]="true">
+    <app-user-form (nuevoRegistro)="cargarUsuarios()"></app-user-form>
+</p-dialog>
+
+<p-dialog header="Usuario" [(visible)]="display2" [breakpoints]="{ '960px': '30vw' }" 
+          [style]="{ width: '70vw' }" [modal]="true">
+    <app-user-form [edit]="usuario" (registroEditado)="cargarUsuarios()"></app-user-form>
+</p-dialog>
+
+<!-- Toolbar -->
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="Nuevo Usuario" icon="pi pi-plus" severity="secondary" class="mr-2"
+                  (click)="open()" />
+        
+    </ng-template>
+
+</p-toolbar>
+
+<!-- Tabla de usuarios -->
+<p-table
+    #dt
+    [value]="users"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['name', 'email', 'rol', 'estado']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedUsers"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} usuarios"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <!-- Buscador -->
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Gestión de Usuarios</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <!-- Encabezados -->
+    <ng-template #header>
+        <tr>
+            <th pSortableColumn="id" style="min-width: 6rem">
+                ID
+                <p-sortIcon field="id" />
+            </th>
+            <th pSortableColumn="name" style="min-width: 16rem">
+                Nombre
+                <p-sortIcon field="name" />
+            </th>
+            <th pSortableColumn="email" style="min-width: 20rem">
+                Correo
+                <p-sortIcon field="email" />
+            </th>
+            <th pSortableColumn="rol" style="min-width: 12rem">
+                Rol
+                <p-sortIcon field="rol" />
+            </th>
+            <th pSortableColumn="estado" style="min-width: 10rem">
+                Estado
+                <p-sortIcon field="estado" />
+            </th>
+            <th style="min-width: 10rem">Acciones</th>
+        </tr>
+    </ng-template>
+
+    <!-- Cuerpo de la tabla -->
+    <ng-template #body let-user>
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.rol }}</td>
+            <td>
+                <p-tag [value]="user.estado === 'S' ? 'Activo' : 'Inactivo'"
+                       [severity]="user.estado === 'S' ? 'success' : 'danger'" />
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                          (click)="editUser(user)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
+                          (click)="deleteUser(user)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- Confirmación para eliminar -->
+<p-confirmdialog [style]="{ width: '450px' }" />
+<p-toast></p-toast>
