@@ -20,6 +20,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { HorarioForm } from "../components/horario-form/horario-form";
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-horarios-crud',
@@ -48,6 +49,7 @@ import { HorarioForm } from "../components/horario-form/horario-form";
 })
 export class HorariosCrud {
 
+  private searchSubject = new Subject<string>();
   display=false;
   display2=false;
 
@@ -63,15 +65,28 @@ selectedUsers: any[] = []; // para selección múltiple
       //this.dt.exportCSV();
   }
   ngOnInit() {
-    this.cargarEspecialidades();
+    this.cargarHorarios();
+    this.searchSubject.pipe(
+          debounceTime(400),
+          distinctUntilChanged()
+        ).subscribe(term => {
+          this.cargarHorarios(term);
+        });
   }
 
-  cargarEspecialidades(){
-    this.horariosService.listarHorarios().subscribe(d=>{
+  cargarHorarios(param?:string){
+    this.horariosService.listarHorarios(param??'').subscribe(d=>{
       console.log(d);
       
       this.horarios=d;
     })
+  }
+
+  onGlobalFilter(event: any) {
+    const value = (event.target as HTMLInputElement).value;
+    console.log(value);
+    
+    this.searchSubject.next(value);
   }
 
   open() {
@@ -94,7 +109,7 @@ deleteE(h: any) {
   this.horariosService.eliminarHorarios(h.id).subscribe({
     next:d=>{
       this.messageService.add({severity:'success', summary:'Éxito', detail:'se elimino la especialidad'});
-      this.cargarEspecialidades();
+      this.cargarHorarios();
     },
     error:e=>{
         this.messageService.add({severity:'error', summary:'Error', detail:e.error.message});
@@ -107,8 +122,5 @@ deleteSelectedUsers() {
   // eliminar múltiples
 }
 
-onGlobalFilter(a:any,x:any){
-
-}
 
 }

@@ -20,6 +20,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { EspecialidadForm } from "../components/especialidad-form/especialidad-form";
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-especialidades-crud',
@@ -48,6 +49,7 @@ import { EspecialidadForm } from "../components/especialidad-form/especialidad-f
 })
 export class EspecialidadesCrud {
 
+  private searchSubject = new Subject<string>();
   display=false;
   display2=false;
 
@@ -64,14 +66,26 @@ selectedUsers: any[] = []; // para selección múltiple
   }
   ngOnInit() {
     this.cargarEspecialidades();
+
+    // aquí aplicamos debounce
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.cargarEspecialidades(term);
+    });
   }
 
-  cargarEspecialidades(){
-    this.especialidadService.listarEspecialidades().subscribe(d=>{
-      console.log(d);
-      
-      this.especialidades=d;
-    })
+  cargarEspecialidades(param?: string) {
+    this.especialidadService.listarEspecialidades(param ?? '').subscribe(d => {
+      this.especialidades = d;
+    });
+  }
+
+  onGlobalFilter(event: any) {
+    const value = (event.target as HTMLInputElement).value;
+    
+    this.searchSubject.next(value);
   }
 
   open() {
@@ -107,7 +121,5 @@ deleteSelectedUsers() {
   // eliminar múltiples
 }
 
-onGlobalFilter(a:any,x:any){
 
-}
 }

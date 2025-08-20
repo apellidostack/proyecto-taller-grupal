@@ -20,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { UsuariosService } from '@/services/usuarios-service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -48,6 +49,8 @@ import { UsuariosService } from '@/services/usuarios-service';
   providers: [MessageService, ConfirmationService]
 })
 export class Users {
+  private searchSubject = new Subject<string>();
+  
   display=false;
   display2=false;
 
@@ -64,14 +67,27 @@ selectedUsers: any[] = []; // para selección múltiple
   }
   ngOnInit() {
     this.cargarUsuarios();
+
+    this.searchSubject.pipe(
+              debounceTime(400),
+              distinctUntilChanged()
+            ).subscribe(term => {
+              this.cargarUsuarios(term);
+            });
   }
 
-  cargarUsuarios(){
-    this.usuariosService.verUsuarios().subscribe(d=>{
+  cargarUsuarios(param?:string){
+    this.usuariosService.verUsuarios(param??'').subscribe(d=>{
       console.log(d);
       
       this.users=d;
     })
+  }
+
+  onGlobalFilter(event: any) {
+    const value = (event.target as HTMLInputElement).value;
+    
+    this.searchSubject.next(value);
   }
 
   open() {
@@ -103,10 +119,6 @@ deleteUser(user: any) {
 
 deleteSelectedUsers() {
   // eliminar múltiples
-}
-
-onGlobalFilter(a:any,x:any){
-
 }
 
 

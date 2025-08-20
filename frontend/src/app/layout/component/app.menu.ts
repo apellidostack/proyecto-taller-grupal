@@ -50,6 +50,14 @@ export class AppMenu {
                     label: 'Usuarios',
                     items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/admin'] }]
                 },
+                {
+                    label: 'Especialidades',
+                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/especialidades'] }]
+                },
+                {
+                    label: 'Horarios',
+                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/horarios'] }]
+                },
                 
                 {
                     label: 'Cerrar Sesion',

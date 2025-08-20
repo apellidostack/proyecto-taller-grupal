@@ -11,8 +11,8 @@ import { environment } from 'src/environments/environment';
 export class EspecialidadesService {
   private http=inject(HttpClient);
   private url=environment.ruta+"especialidades";
-  listarEspecialidades():Observable<Especialidad[]>{
-    return this.http.get<Especialidad[]>(this.url).pipe(map((d)=>d as Especialidad[]));
+  listarEspecialidades(param?:string):Observable<Especialidad[]>{
+    return this.http.get<Especialidad[]>(this.url+"/buscar?busqueda="+param).pipe(map((d)=>d as Especialidad[]));
   }
   registrarEspecialidad(especialidad:AbstractControl):Observable<Especialidad>{
     return this.http.post<Especialidad>(this.url,especialidad.value).pipe(map((d)=>d as Especialidad));

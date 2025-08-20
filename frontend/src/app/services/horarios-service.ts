@@ -12,8 +12,8 @@ export class HorariosService {
   private http =inject(HttpClient);
   private url=environment.ruta+"horarios";
 
-  listarHorarios():Observable<any[]>{
-    return this.http.get<any[]>(this.url);
+  listarHorarios(param?:string):Observable<any[]>{
+    return this.http.get<any[]>(this.url+"/buscar?busqueda="+param);
   }
   registrarHorarios(horario:AbstractControl):Observable<any>{
     return this.http.post<any>(this.url,horario.value);

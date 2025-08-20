@@ -14,8 +14,8 @@ export class UsuariosService {
     return this.http.post<any>(this.url,user);
   }
 
-  verUsuarios():Observable<any[]>{
-    return this.http.get<any[]>(environment.ruta+"usuarios");
+  verUsuarios(param?:string):Observable<any[]>{
+    return this.http.get<any[]>(environment.ruta+"usuarios/buscar?busqueda="+param);
   }
   editarUsuario(id:number,user:User):Observable<any[]>{
     return this.http.put<any[]>(environment.ruta+"usuarios/"+id,user);
