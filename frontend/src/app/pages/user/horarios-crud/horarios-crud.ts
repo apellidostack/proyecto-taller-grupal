@@ -84,7 +84,6 @@ selectedUsers: any[] = []; // para selección múltiple
 
   onGlobalFilter(event: any) {
     const value = (event.target as HTMLInputElement).value;
-    console.log(value);
     
     this.searchSubject.next(value);
   }

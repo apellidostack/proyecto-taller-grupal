@@ -49,7 +49,8 @@ import { LoginService } from '@/services/login-service';
   providers: [MessageService, ConfirmationService]
 })
 export class CrudCitas implements OnInit{
-
+  
+  idMedico:any;
  citas: any[] = [];
   selectedCita!: any | null;
   mostrarDialogo = false;
@@ -70,6 +71,7 @@ export class CrudCitas implements OnInit{
   formGroup!: FormGroup;
 
   ngOnInit() {
+    this.idMedico=this.loginService.token()?.id;
     this.cargarCitas();
     this.formGroup=this.formBuilder.group({
       historial_medico:['',Validators.required],
@@ -77,7 +79,7 @@ export class CrudCitas implements OnInit{
   }
 
   cargarCitas() {
-    this.citaService.verCitas(1).subscribe(d => {
+    this.citaService.verCitas(this.idMedico).subscribe(d => {
       console.log(d);
       
       this.citas = d;

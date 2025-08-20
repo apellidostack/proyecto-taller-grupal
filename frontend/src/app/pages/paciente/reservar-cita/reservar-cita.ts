@@ -29,6 +29,7 @@ import { ToastModule } from 'primeng/toast';
   providers: [MessageService]
 })
 export class ReservarCita{
+  idTipoUsuario:any;
   formCita!: FormGroup;
   horarios: MedicoHorarios[] = [];
   horarioSeleccionado!: any;
@@ -43,6 +44,7 @@ export class ReservarCita{
   ) {}
 
   ngOnInit(): void {
+    this.idTipoUsuario=this.loginService.token()?.id;
     this.formCita = this.fb.group({
       fecha: [null, Validators.required],
       razon: ['', Validators.required],
@@ -68,7 +70,7 @@ export class ReservarCita{
 
   especialidades:Especialidad[]=[];
   cargarEspecialidad(){
-    this.especialidadService.listarEspecialidades().subscribe(d=>{
+    this.especialidadService.listarEspecialidades('').subscribe(d=>{
       this.especialidades=d;
     })
   }
@@ -142,7 +144,7 @@ calcularHoras(fechaInicioManual: Date) {
       tiempo_final: this.formCita.value.tiempo_final,
       razon: this.formCita.value.razon,
       horario_id: this.horarioSeleccionado.id,
-      paciente_id: 1
+      paciente_id: this.idTipoUsuario
     };
     
     this.citaService.reservarCita(cita).subscribe({

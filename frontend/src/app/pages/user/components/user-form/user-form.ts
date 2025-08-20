@@ -235,7 +235,7 @@ export class UserForm implements OnInit, OnChanges{
   }
 
   listarEspecialidad(){
-    this.especialidadService.listarEspecialidades().subscribe(d=>{
+    this.especialidadService.listarEspecialidades('').subscribe(d=>{
       this.especialidades=d;
     })
   }
