@@ -7,9 +7,10 @@ import { EspecialidadesService } from '@/services/especialidades-service';
 import { UsuariosService } from '@/services/usuarios-service';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
 import { FluidModule } from 'primeng/fluid';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -18,7 +19,7 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-user-form',
   imports: [FluidModule, SelectModule, InputTextModule, FormsModule, ButtonModule,
-    ReactiveFormsModule,CommonModule,ToastModule],
+    ReactiveFormsModule,CommonModule,ToastModule,DatePicker],
   templateUrl: './user-form.html',
   styleUrl: './user-form.scss',
   providers:[MessageService]
@@ -94,7 +95,9 @@ export class UserForm implements OnInit, OnChanges{
     });
   }
 
-  registrarUsuario(){
+  registrarUsuario(f:FormGroupDirective){
+    console.log(this.formGroup.value);
+    
     if(this.formGroup.valid){
       const { name, email, password, password_confirmation, telefono, rol, tipo } = this.formGroup.value;
 
@@ -112,8 +115,10 @@ export class UserForm implements OnInit, OnChanges{
     this.formGroup.get('rol')?.value as string,
       );
     } else if (rol === "paciente") {
+      const fechaISO = new Date(this.formGroup.controls.tipo.get('nacimiento')?.value as string);
+      const fechaFormateada = fechaISO.toISOString().split('T')[0];
       usuario = new Paciente(
-        this.formGroup.controls.tipo.get('nacimiento')?.value as string,
+         fechaFormateada,
         this.formGroup.controls.tipo.get('sexo')?.value as string,
         this.formGroup.controls.tipo.get('direccion')?.value as string,
         this.formGroup.controls.tipo.get('historial_medico')?.value as string,
@@ -139,6 +144,7 @@ export class UserForm implements OnInit, OnChanges{
     this.usuarioService.registrarUsuario(usuario).subscribe({
       next:(d)=>{
         console.log(d);
+        f.resetForm();
         this.messageService.add({severity:'success', summary:'Éxito', detail:'Registro exitoso'});
         this.nuevoRegistro.emit();
         
@@ -169,8 +175,10 @@ export class UserForm implements OnInit, OnChanges{
     this.formGroup.get('rol')?.value as string,
       );
     } else if (rol === "paciente") {
+      const fechaISO = new Date(this.formGroup.controls.tipo.get('nacimiento')?.value as string);
+      const fechaFormateada = fechaISO.toISOString().split('T')[0];
       usuario = new Paciente(
-        this.formGroup.controls.tipo.get('nacimiento')?.value as string,
+        fechaFormateada,
         this.formGroup.controls.tipo.get('sexo')?.value as string,
         this.formGroup.controls.tipo.get('direccion')?.value as string,
         this.formGroup.controls.tipo.get('historial_medico')?.value as string,

@@ -1,7 +1,7 @@
 <p-fluid>
 
 
-    <form class="flex" [formGroup]="formGroup" (ngSubmit)="edit?editarUsuario():registrarUsuario()">
+    <form class="flex" [formGroup]="formGroup" (ngSubmit)="edit?editarUsuario():registrarUsuario(f)" #f="ngForm">
     <div class="card flex flex-col gap-6 w-full">
         @if (edit) {
             <div class="font-semibold text-xl">Actualizar Usuario</div>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="flex flex-wrap gap-2 w-full">
                         <label for="especialidad_id">especialidad_id</label>
-                        <p-select id="especialidad_id" [options]="especialidades" formControlName="especialidad_id" optionValue="id" optionLabel="nombre" placeholder="Select One" class="w-full" (onChange)="especialiadChange($event)"></p-select>
+                        <p-select id="especialidad_id" [options]="especialidades" formControlName="especialidad_id" appendTo="body" optionValue="id" optionLabel="nombre" placeholder="Select One" class="w-full" (onChange)="especialiadChange($event)"></p-select>
                     </div>
                 </div>
                 }
@@ -63,8 +63,14 @@
                     <div class="font-semibold text-xl"></div>
                     <div class="flex flex-wrap gap-6">
                         <div class="flex flex-col grow basis-0 gap-2">
-                            <label for="nacimiento">nacimiento</label>
-                            <input pInputText id="nacimiento" formControlName="nacimiento" type="text" />
+                            <label>nacimiento</label>
+                            <p-date-picker 
+                            formControlName="nacimiento"
+                            [showIcon]="true"
+                            dateFormat="yy-mm-dd"
+                            >
+                            </p-date-picker>
+                        
                         </div>
                         <div class="flex flex-col grow basis-0 gap-2">
                             <label for="sexo">sexo</label>

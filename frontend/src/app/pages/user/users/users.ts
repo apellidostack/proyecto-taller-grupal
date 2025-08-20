@@ -75,6 +75,7 @@ selectedUsers: any[] = []; // para selección múltiple
   }
 
   open() {
+    this.usuario=null;
   this.display = true;
 }
 
