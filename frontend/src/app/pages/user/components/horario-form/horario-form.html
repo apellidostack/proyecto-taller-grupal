@@ -1,0 +1,49 @@
+<p-fluid>
+
+
+    <form class="flex" [formGroup]="formGroup" (ngSubmit)="edit?editarEspecialidad():registrarEspecialidad(f)" #f="ngForm">
+    <div class="card flex flex-col gap-6 w-full">
+        @if (edit) {
+            <div class="font-semibold text-xl">Actualizar Horario</div>
+            
+        }@else {
+
+            <div class="font-semibold text-xl">Registrar Horario</div>
+        }
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="nombre">Nombre</label>
+                        <input pInputText id="nombre" type="text" formControlName="dia_semana" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="descripcion">descripcion</label>
+                        <input pInputText id="descripcion" type="text" formControlName="tiempo_inicio" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="nombre">Nombre</label>
+                        <input pInputText id="nombre" type="text" formControlName="tiempo_final" />
+                    </div>
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="descripcion">descripcion</label>
+                        <input pInputText id="descripcion" type="text" formControlName="duracion_cita" />
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-wrap gap-2 w-full">
+                        <label for="nombre">Nombre</label>
+                        <input pInputText id="nombre" type="text" formControlName="medico_id" />
+                    </div>
+                </div>
+
+                <p-button type="submit" label="{{edit?'Editar':'Registrar'}}" raised />
+
+                
+            </div>
+            </form>
+
+</p-fluid>
+<p-toast></p-toast>

@@ -1,0 +1,94 @@
+<!-- Modal con tu formulario de usuario -->
+<p-dialog header="horario" [(visible)]="display" [breakpoints]="{ '960px': '30vw' }" 
+          [style]="{ width: '70vw' }" [modal]="true">
+          <app-horario-form (nuevoRegistro)="cargarEspecialidades()"></app-horario-form>
+        </p-dialog>
+        
+        <p-dialog header="Editar horario" [(visible)]="display2" [breakpoints]="{ '960px': '30vw' }" 
+        [style]="{ width: '70vw' }" [modal]="true">
+        <app-horario-form [edit]="horario" (registroEditado)="cargarEspecialidades()"></app-horario-form>
+
+</p-dialog>
+
+<!-- Toolbar -->
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="Nuevo horario" icon="pi pi-plus" severity="secondary" class="mr-2"
+                  (click)="open()" />
+        
+    </ng-template>
+
+</p-toolbar>
+
+<!-- Tabla de usuarios -->
+<p-table
+    #dt
+    [value]="horarios"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['name', 'email', 'rol', 'estado']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [(selection)]="selectedUsers"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} especialidades"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <!-- Buscador -->
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Gestión de Especialidades</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <!-- Encabezados -->
+    <ng-template #header>
+        <tr>
+            <th pSortableColumn="id" style="min-width: 6rem">
+                ID
+                <p-sortIcon field="id" />
+            </th>
+            <th pSortableColumn="nombre" style="min-width: 16rem">
+                tiempo_inicio
+                <p-sortIcon field="nombre" />
+            </th>
+            <th pSortableColumn="descripcion" style="min-width: 20rem">
+                tiempo_final
+                <p-sortIcon field="descripcion" />
+            </th>
+            <th pSortableColumn="estado" style="min-width: 10rem">
+                Estado
+                <p-sortIcon field="estado" />
+            </th>
+            <th style="min-width: 10rem">Acciones</th>
+        </tr>
+    </ng-template>
+
+    <!-- Cuerpo de la tabla -->
+    <ng-template #body let-horario>
+        <tr>
+            <td>{{ horario.id }}</td>
+            <td>{{ horario.tiempo_inicio }}</td>
+            <td>{{ horario.tiempo_final }}</td>
+            <td>
+                <p-tag [value]="horario.estado === 'S' ? 'Activo' : 'Inactivo'"
+                       [severity]="horario.estado === 'S' ? 'success' : 'danger'" />
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
+                          (click)="edit(horario)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
+                          (click)="deleteE(horario)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- Confirmación para eliminar -->
+<p-confirmdialog [style]="{ width: '450px' }" />
+<p-toast></p-toast>

@@ -1,6 +1,7 @@
 import { Horario, HorarioConMedico, MedicoHorarios } from '@/models/horario';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -10,6 +11,19 @@ import { environment } from 'src/environments/environment';
 export class HorariosService {
   private http =inject(HttpClient);
   private url=environment.ruta+"horarios";
+
+  listarHorarios():Observable<any[]>{
+    return this.http.get<any[]>(this.url);
+  }
+  registrarHorarios(horario:AbstractControl):Observable<any>{
+    return this.http.post<any>(this.url,horario.value);
+  }
+  editarHorarios(id:number,horario:AbstractControl):Observable<any>{
+    return this.http.put<any>(this.url+"/"+id,horario.value);
+  }
+  eliminarHorarios(id:number):Observable<any>{
+    return this.http.delete<any>(this.url+"/"+id);
+  }
 
   verHorarios(fecha:string,especialidad_id:number):Observable<any[]>{
     return this.http.get<MedicoHorarios[]>(`${this.url}/disponibles?fecha=${fecha}&especialidad_id=${especialidad_id}`)
