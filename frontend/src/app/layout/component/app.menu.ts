@@ -44,25 +44,21 @@ export class AppMenu {
     admin=[
                 {
                     label: 'Admin',
-                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home' }]
+                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-user' }]
                 },
                 {
-                    label: 'Usuarios',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/admin'] }]
-                },
-                {
-                    label: 'Especialidades',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/especialidades'] }]
-                },
-                {
-                    label: 'Horarios',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/horarios'] }]
+                    label: 'Menu',
+                    items: [
+                        { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/pages/admin'] },
+                        { label: 'Especialidades', icon: 'pi pi-fw pi-thumbtack', routerLink: ['/pages/especialidades'] },
+                        { label: 'Horarios', icon: 'pi pi-fw pi-clock', routerLink: ['/pages/horarios'] }
+                    ]
                 },
                 
                 {
                     label: 'Cerrar Sesion',
                      
-                    items: [{ label: "Cerrar Sesion",icon: 'pi pi-fw pi-home' ,
+                    items: [{ label: "Cerrar Sesion",icon: 'pi pi-fw pi-sign-out' ,
                         command: () => {
                         
                         this.cerrarSesion();
@@ -73,17 +69,19 @@ export class AppMenu {
             ];
     doctor=[
                 {
-                    label: 'Doctor',
-                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home' }]
+                    label: 'Medico',
+                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-user' }]
                 },
                 {
-                    label: 'Usuarios',
-                    items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/medico'] }]
+                    label: 'Menu',
+                    items: [{ label: 'Citas', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/medico'] },
+                            { label: 'Reportes', icon: 'pi pi-fw pi-pen-to-square', routerLink: ['/pages/medico/reporte'] }
+                        ]
                 },
                 {
                     label: 'Cerrar Sesion',
                      
-                    items: [{ label: "Cerrar Sesion",icon: 'pi pi-fw pi-home' ,
+                    items: [{ label: "Cerrar Sesion",icon: 'pi pi-fw pi-sign-out' ,
                         command: () => {
                         
                         this.cerrarSesion();
@@ -95,16 +93,12 @@ export class AppMenu {
     paciente=[
                 {
                     label: 'Usuario',
-                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home' }]
-                },
-                {
-                    label: 'Reservar Cita',
-                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-home', routerLink:['/pages/paciente'] }]
+                    items: [{ label: this.loginService.token()?.name, icon: 'pi pi-fw pi-user' }]
                 },
                 {
                     label: 'Cerrar Sesion',
                      
-                    items: [{ label: "Cerrar Sesion",icon: 'pi pi-fw pi-home' ,
+                    items: [{ label: "Cerrar Sesion",icon: 'pi pi-fw pi-sign-out' ,
                         command: () => {
                         
                         this.cerrarSesion();

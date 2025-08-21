@@ -35,6 +35,7 @@
                                   [timeOnly]="true"
                                   hourFormat="24">
                         </p-date-picker>
+
                     </div>
                     <div class="flex flex-col grow basis-0 gap-2">
                         <label>Duración</label>
@@ -48,7 +49,8 @@
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="flex flex-wrap gap-2 w-full">
                         <label for="nombre">Medico</label>
-                        <input pInputText id="nombre" type="text" formControlName="medico_id" />
+                        <p-select id="nombre" [options]="medicos" formControlName="medico_id" appendTo="body" optionValue="id" optionLabel="user.name" placeholder="Select One" class="w-full"></p-select>
+
                     </div>
                 </div>
 

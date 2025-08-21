@@ -1,28 +1,34 @@
 import { LoginService } from '@/services/login-service';
 import { ReportesService } from '@/services/reportes-service';
 import { UsuariosService } from '@/services/usuarios-service';
-import { DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import { Component, inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FluidModule } from 'primeng/fluid';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
+import localeEs from '@angular/common/locales/es';
+import { PdfService } from '@/services/pdf-service';
+
+registerLocaleData(localeEs);
 
 @Component({
   selector: 'app-reporte-citas',
-  imports: [DatePickerModule,ButtonModule,ReactiveFormsModule,FluidModule,TableModule,DatePipe,ToastModule],
+  imports: [DatePickerModule,ButtonModule,ReactiveFormsModule,FluidModule,TableModule,DatePipe,ToastModule,TagModule],
   templateUrl: './reporte-citas.html',
   styleUrl: './reporte-citas.scss',
-  providers:[MessageService]
+  providers:[MessageService,{ provide: LOCALE_ID, useValue: 'es-ES' }]
 })
 export class ReporteCitas implements OnInit{
   private formBuilder=inject(FormBuilder);
   private usuarioService=inject(UsuariosService);
   private reportesService=inject(ReportesService);
   private loginService=inject(LoginService);
+  private pdfService=inject(PdfService);
   idMed:any;
   ngOnInit(): void {
     const id=this.loginService.token()?.id;
@@ -64,6 +70,10 @@ export class ReporteCitas implements OnInit{
       console.log(d);
       
     });
+  }
+
+  imprimir(){
+    this.pdfService.generarPDF(this.listaCitas);
   }
 
 }

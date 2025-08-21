@@ -60,4 +60,62 @@ export class PdfService {
 
     pdfMake.createPdf(docDefinition).open(); // también puedes usar .download('boleta.pdf')
   }
+
+
+
+
+
+
+
+  generarPDF(listaCitas:any[]) {
+
+    // Preparar filas de la tabla
+    const body = [
+    ['ID', 'Nombre', 'Fecha', 'Hora Inicio', 'Hora Final', 'Estado'] // encabezado
+  ];
+
+  listaCitas.forEach(cita => {
+    const estadoStr = cita.estado === 'S' ? 'Vigente' : 'Pasado';
+    
+    // Formatear fecha tipo fullDate en español
+    const fechaFormateada = new Date(cita.fecha).toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    body.push([
+      cita.cita_id,
+      cita.paciente,
+      fechaFormateada,
+      cita.hora_inicio.substring(0, 5), // HH:mm
+      cita.hora_fin.substring(0, 5),    // HH:mm
+      estadoStr
+    ]);
+  });
+
+  const docDefinition: any = {
+    pageSize: 'A4',
+    pageMargins: [40, 40, 40, 40],
+    content: [
+      { text: 'Reporte de Citas', style: 'header', marginBottom: 20 },
+      {
+        table: {
+          headerRows: 1,
+          widths: ['auto', '*', '*', 'auto', 'auto', 'auto'],
+          body: body
+        },
+        layout: {
+          fillColor: (rowIndex: number) => rowIndex === 0 ? '#CCCCCC' : null
+        }
+      }
+    ],
+    styles: {
+      header: { fontSize: 18, bold: true, alignment: 'center' }
+    }
+  };
+
+  pdfMake.createPdf(docDefinition).open();
+}
 }

@@ -170,6 +170,9 @@ calcularHoras(fechaInicioManual: Date) {
     error:e=>{
         this.messageService.add({severity:'error', summary:'Error', detail:e.error.message});
 
+      },
+      complete:()=>{
+        this.router.navigateByUrl("/pages/paciente/reporte");
       }
     });
 

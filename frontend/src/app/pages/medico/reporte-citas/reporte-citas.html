@@ -1,31 +1,34 @@
 <p-fluid>
 
 <form class="flex" [formGroup]="formGroup" (ngSubmit)="reportes()" >
+    <div class="card flex flex-col gap-6 w-full">
 
 <div class="font-semibold text-xl">Reporte Citas</div>
     <div class="flex flex-col md:flex-row gap-6">
         <div class="flex flex-col grow basis-0 gap-2">
-            <label>fecha_inicio</label>
+            <label>Desde</label>
             <p-date-picker 
             formControlName="fecha_inicio"
             [showIcon]="true"
             dateFormat="yy-mm-dd"
+            (onSelect)="reportes()"
             >
             </p-date-picker>
         </div>
 
         <div class="flex flex-col grow basis-0 gap-2">
-            <label>fecha_fin</label>
+            <label>Hasta</label>
             <p-date-picker 
             formControlName="fecha_fin"
             [showIcon]="true"
             dateFormat="yy-mm-dd"
+            (onSelect)="reportes()"
             >
             </p-date-picker>
         </div>
 
     </div>
-    <p-button type="submit" label="Buscar" raised />
+    </div>
     
 </form>
 
@@ -40,30 +43,40 @@
   <ng-template #header>
     <tr>
       <th>ID</th>
+      <th>Nombre</th>
       <th>Fecha</th>
       <th>Hora Inicio</th>
       <th>Hora Final</th>
       <th>Razón</th>
-      <th>Acciones</th>
     </tr>
   </ng-template>
 
   <ng-template #body let-cita>
     <tr>
       <td>{{ cita.cita_id }}</td>
+      <td>{{ cita.paciente }}</td>
       <td>{{ cita.fecha | date:'fullDate'}}</td>
       <td>{{ cita.hora_inicio }}</td>
       <td>{{ cita.hora_fin }}</td>
-      <td>{{ cita.razon }}</td>
       <td>
-        <p-button
-          label="Ver detalle"
-          icon="pi pi-search"
-        />
+        <p-tag [value]="cita.estado === 'S' ? 'Vigente' : 'Pasado'"
+          [severity]="cita.estado === 'S' ? 'success' : 'danger'" />
       </td>
+      <td>{{ cita.razon }}</td>
+      
     </tr>
   </ng-template>
 </p-table>
+@if(listaCitas.length>0){
 
+  <div>
+  
+    <p-button
+      label="Generar pdf"
+      icon="pi pi-print"
+      (onClick)="imprimir()"
+    />
+  </div>
+}
 </p-fluid>
 <p-toast></p-toast>

@@ -1,5 +1,6 @@
 import { EspecialidadesService } from '@/services/especialidades-service';
 import { HorariosService } from '@/services/horarios-service';
+import { UsuariosService } from '@/services/usuarios-service';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
@@ -28,6 +29,7 @@ export class HorarioForm {
 
   private formBuilder=inject(FormBuilder);
   private horariosService=inject(HorariosService);
+  private usuarioService=inject(UsuariosService);
   private messageService=inject(MessageService);
   formGroup=this.formBuilder.nonNullable.group({
     dia_semana: ['',Validators.required],
@@ -39,11 +41,17 @@ export class HorarioForm {
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['edit']){
       if(this.edit){
+        console.log(this.edit);
+      const formatTime = (t: string | Date) => {
+      if (!t) return '';
+      const date = t instanceof Date ? t : new Date(`1970-01-01T${t}`);
+      return date.toTimeString().substring(0, 5); // "HH:mm"
+    };
       
       this.formGroup.controls.dia_semana.setValue(this.edit.dia_semana!);
-      this.formGroup.controls.tiempo_inicio.setValue(this.edit.tiempo_inicio!);
-      this.formGroup.controls.tiempo_final.setValue(this.edit.tiempo_final!);
-      this.formGroup.controls.duracion_cita.setValue(this.edit.duracion_cita!);
+      this.formGroup.controls.tiempo_inicio.setValue(formatTime(this.edit.tiempo_inicio!));
+      this.formGroup.controls.tiempo_final.setValue(formatTime(this.edit.tiempo_final!));
+      this.formGroup.controls.duracion_cita.setValue(formatTime(this.edit.duracion_cita!));
       this.formGroup.controls.medico_id.setValue(this.edit.medico_id!);
     console.log(this.formGroup.value);
     
@@ -51,7 +59,7 @@ export class HorarioForm {
     }
   }
   ngOnInit(): void {
-    
+    this.listarMedicos();
   }
   
 
@@ -60,6 +68,8 @@ export class HorarioForm {
     console.log(this.formGroup.value);
     
     if(this.formGroup.valid){
+    this.formatFormTimes();
+
     this.horariosService.registrarHorarios(this.formGroup).subscribe({
       next:(d)=>{
         console.log(d);
@@ -78,7 +88,7 @@ export class HorarioForm {
 
   editarEspecialidad(){
     if(this.formGroup.valid){
-    
+    this.formatFormTimes();
     this.horariosService.editarHorarios(this.edit.id,this.formGroup).subscribe({
       next:(d)=>{
         console.log(d);
@@ -102,6 +112,36 @@ export class HorarioForm {
   { label: 'Sábado', value: 6 },
   { label: 'Domingo', value: 7 }
 ];
+
+medicos:any[]=[];
+listarMedicos(){
+  this.usuarioService.listarMedicos().subscribe({
+    next:d=>{
+      this.medicos=d;
+      console.log(this.medicos);
+      
+    }
+  })
+}
+
+private formatFormTimes() {
+  const formatTime = (t: string | Date) => {
+    if (!t) return '';
+    const date = t instanceof Date ? t : new Date(`1970-01-01T${t}`);
+    return date.toTimeString().substring(0, 5); // "HH:mm"
+  };
+
+  this.formGroup.patchValue({
+    tiempo_inicio: formatTime(this.formGroup.value.tiempo_inicio!),
+    tiempo_final: formatTime(this.formGroup.value.tiempo_final!),
+    duracion_cita: formatTime(this.formGroup.value.duracion_cita!)
+  });
+}
+
+
+
+
+
 
 
 }

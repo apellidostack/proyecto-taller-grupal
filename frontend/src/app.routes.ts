@@ -14,7 +14,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         canActivate: [authGuard],
         children: [
-            { path: '', component: ReservarCita },
+            { path: '', component: AppLayout },
 /*             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') }, */
             //{ path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
