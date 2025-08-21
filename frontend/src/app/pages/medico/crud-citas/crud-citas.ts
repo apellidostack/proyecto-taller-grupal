@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
+import { Component, LOCALE_ID, OnInit, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -22,7 +22,9 @@ import { Cita } from '@/models/cita';
 import { CitaService } from '@/services/cita-service';
 import { UsuariosService } from '@/services/usuarios-service';
 import { LoginService } from '@/services/login-service';
+import localeEs from '@angular/common/locales/es';
 
+registerLocaleData(localeEs);
 @Component({
   selector: 'app-crud-citas',
   imports: [CommonModule,
@@ -43,10 +45,10 @@ import { LoginService } from '@/services/login-service';
         InputIconModule,
         IconFieldModule,
         ConfirmDialogModule,
-      ReactiveFormsModule],
+      ReactiveFormsModule,DatePipe],
   templateUrl: './crud-citas.html',
   styleUrl: './crud-citas.scss',
-  providers: [MessageService, ConfirmationService]
+  providers: [MessageService, ConfirmationService,{ provide: LOCALE_ID, useValue: 'es-ES' }]
 })
 export class CrudCitas implements OnInit{
   

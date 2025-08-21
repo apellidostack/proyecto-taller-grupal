@@ -2,9 +2,10 @@ import { EspecialidadesService } from '@/services/especialidades-service';
 import { HorariosService } from '@/services/horarios-service';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroupDirective } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
 import { FluidModule } from 'primeng/fluid';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -13,7 +14,7 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-horario-form',
   imports: [FluidModule, SelectModule, InputTextModule, FormsModule, ButtonModule,
-    ReactiveFormsModule,CommonModule,ToastModule],
+    ReactiveFormsModule,CommonModule,ToastModule,SelectModule,DatePicker],
   templateUrl: './horario-form.html',
   styleUrl: './horario-form.scss',
   providers:[MessageService]
@@ -29,11 +30,11 @@ export class HorarioForm {
   private horariosService=inject(HorariosService);
   private messageService=inject(MessageService);
   formGroup=this.formBuilder.nonNullable.group({
-    dia_semana: '',
-    tiempo_inicio: '',
-    tiempo_final: '',
-    duracion_cita: '',
-    medico_id: '',
+    dia_semana: ['',Validators.required],
+    tiempo_inicio: ['',Validators.required],
+    tiempo_final: ['',Validators.required],
+    duracion_cita: ['',Validators.required],
+    medico_id: [''],
   });
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['edit']){
@@ -91,5 +92,16 @@ export class HorarioForm {
     })
     }
   }
+
+  diasSemana = [
+  { label: 'Lunes', value: 1 },
+  { label: 'Martes', value: 2 },
+  { label: 'Miércoles', value: 3 },
+  { label: 'Jueves', value: 4 },
+  { label: 'Viernes', value: 5 },
+  { label: 'Sábado', value: 6 },
+  { label: 'Domingo', value: 7 }
+];
+
 
 }

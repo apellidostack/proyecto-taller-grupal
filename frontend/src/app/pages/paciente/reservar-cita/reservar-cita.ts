@@ -18,12 +18,14 @@ import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
+import { InformacionCita } from "../informacion-cita/informacion-cita";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-reservar-cita',
-  imports: [InputTextModule,ButtonModule,SelectModule,TableModule,
-    CommonModule,FormsModule,ToastModule,CardModule,ReactiveFormsModule,
-    DatePickerModule,TextareaModule],
+  imports: [InputTextModule, ButtonModule, SelectModule, TableModule,
+    CommonModule, FormsModule, ToastModule, CardModule, ReactiveFormsModule,
+    DatePickerModule, TextareaModule],
   templateUrl: './reservar-cita.html',
   styleUrl: './reservar-cita.scss',
   providers: [MessageService]
@@ -41,6 +43,8 @@ export class ReservarCita{
     private citaService: CitaService,
     private loginService: LoginService,
     private messageService: MessageService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +59,14 @@ export class ReservarCita{
       paciente_id: ['']
     });
     this.cargarEspecialidad();
+    
+    this.route.data.subscribe(({ citaActual }) => {
+    if (citaActual) {
+      // si existe cita, redirige
+      this.router.navigate(['/pages/paciente/reporte'], { state: { cita: citaActual } });
+    } 
+    // sino, se queda en esta página, sin loop
+  });
   }
 
   cargarHorarios(fecha:string,especialidad_id:number) {
@@ -92,7 +104,9 @@ export class ReservarCita{
 
   if (this.formCita.get('fecha')?.value) {
     // usa el inicio por defecto del horario
-    this.formCita.get("tiempo_inicio")?.setValue('');
+    const h_inicio=this.formCita.get('tiempo_inicio')?.value;
+    this.calcularHoras(h_inicio);
+    //this.formCita.get("tiempo_inicio")?.setValue('');
   }
   console.log(this.formCita.value);
 }
@@ -161,5 +175,8 @@ calcularHoras(fechaInicioManual: Date) {
 
     console.log('Cita a reservar:', cita);
   }
+
+  
+
 
 }

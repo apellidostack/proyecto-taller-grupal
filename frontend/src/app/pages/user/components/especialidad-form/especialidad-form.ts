@@ -1,7 +1,7 @@
 import { EspecialidadesService } from '@/services/especialidades-service';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
@@ -29,7 +29,7 @@ export class EspecialidadForm implements OnInit,OnChanges{
   private especialidadService=inject(EspecialidadesService);
   private messageService=inject(MessageService);
   formGroup=this.formBuilder.nonNullable.group({
-    nombre: '',
+    nombre: ['',[Validators.required,Validators.maxLength(20)]],
     descripcion: '',
   });
   ngOnChanges(changes: SimpleChanges): void {

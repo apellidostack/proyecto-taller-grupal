@@ -10,7 +10,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CitaService {
-  
   private apiUrl = environment.ruta;
 
   constructor(private http: HttpClient) {}
@@ -38,10 +37,17 @@ export class CitaService {
   citaPorId(id:number):Observable<any>{
     return this.http.get<any>(this.apiUrl+"citas/"+id);
   }
+  eliminarCita(id:number):Observable<any>{
+    return this.http.delete(this.apiUrl+"citas/"+id);
+  }
+  citaActual(id:any):Observable<any>{
+    return this.http.get<any>(this.apiUrl+"citas/usuario/"+id+"/actual");
+  }
   actualizarHistorial(id:number, historial:AbstractControl):Observable<any>{
     console.log(historial.value);
     
     return this.http.put<any>(this.apiUrl+"citas/"+id+"/historial",historial.value);
   }
+
   
 }

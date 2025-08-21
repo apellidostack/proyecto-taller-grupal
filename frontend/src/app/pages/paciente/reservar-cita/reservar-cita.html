@@ -1,80 +1,81 @@
-<div class="card p-4"> 
-  <h2>Reservar Cita</h2>
-<form [formGroup]="formCita" (ngSubmit)="reservarCita()" class="mt-4">
-  <!-- Selección de fecha -->
-  <div class="card flex flex-col gap-4">
-      <div class="font-semibold text-xl"></div>
-      <div class="flex flex-wrap gap-6">
-          <div class="flex flex-col grow basis-0 gap-2">
-            <label>Fecha</label>
-            <p-date-picker 
-              formControlName="fecha" 
-              [showIcon]="true"
-              dateFormat="yy-mm-dd"
-              (onSelect)="seleccionado()">
-            </p-date-picker>
-          </div>
-          <div class="flex flex-col grow basis-0 gap-2">
-            <label for="especialidad">especialidad</label>
-            <p-select id="especialidad" [options]="especialidades" formControlName="especialidad_id" optionValue="id" optionLabel="nombre" placeholder="Select One" class="w-full" (onChange)="seleccionado()"></p-select>
-          </div>
-      </div>
+
+  <div class="card p-4"> 
+    <h2>Reservar Cita</h2>
+  <form [formGroup]="formCita" (ngSubmit)="reservarCita()" class="mt-4">
+    <!-- Selección de fecha -->
+    <div class="card flex flex-col gap-4">
+        <div class="font-semibold text-xl"></div>
+        <div class="flex flex-wrap gap-6">
+            <div class="flex flex-col grow basis-0 gap-2">
+              <label>Fecha</label>
+              <p-date-picker 
+                formControlName="fecha" 
+                [showIcon]="true"
+                dateFormat="yy-mm-dd"
+                (onSelect)="seleccionado()">
+              </p-date-picker>
+            </div>
+            <div class="flex flex-col grow basis-0 gap-2">
+              <label for="especialidad">especialidad</label>
+              <p-select id="especialidad" [options]="especialidades" formControlName="especialidad_id" optionValue="id" optionLabel="nombre" placeholder="Select One" class="w-full" (onChange)="seleccionado()"></p-select>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Tabla de horarios -->
+  
+    <p-table [value]="horarios" selectionMode="single" [(selection)]="horarioSeleccionado" 
+           (onRowSelect)="onHorarioSeleccionado($event.data)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Duración</th>
+        <th>Médico</th>
+        <th>Registro</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-horario>
+      <tr [pSelectableRow]="horario">
+        <td>{{horario.tiempo_inicio}}</td>
+        <td>{{horario.tiempo_final}}</td>
+        <td>{{horario.duracion_cita}}</td>
+        <td>{{horario.medicoNombre}}</td>
+        <td>{{horario.medicoReg}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+     
+  
+    <!-- Formulario de cita -->
+     <div class="card flex flex-col gap-4">
+                      <div class="font-semibold text-xl"></div>
+                      <div class="flex flex-wrap gap-6">
+                          <div class="flex flex-col grow basis-0 gap-2">
+                            <label for="razon">Razón de la cita</label>
+                            <textarea rows="1" id="razon" pInputTextarea formControlName="razon"></textarea>
+                          </div>
+                          <div class="flex flex-col grow basis-0 gap-2">
+                              <label>Hora Inicio</label>
+                              <p-date-picker 
+                                  formControlName="tiempo_inicio"
+                                  [timeOnly]="true"
+                                  hourFormat="24"
+                                  (onSelect)="onHoraInicioSeleccionada($event)">
+                              </p-date-picker>
+                          </div>
+                          <div class="flex flex-col grow basis-0 gap-2">
+                              <label>Hora Fin</label>
+                              <input pInputText formControlName="tiempo_final" readonly />
+                          </div>
+                      </div>
+                  </div>
+  
+          <button pButton type="submit" label="Reservar" class="mt-3" [disabled]="!horarioSeleccionado || !formCita.get('fecha')?.value || !formCita.valid"></button>
+    </form>
   </div>
-
-  <!-- Tabla de horarios -->
-
-  <p-table [value]="horarios" selectionMode="single" [(selection)]="horarioSeleccionado" 
-         (onRowSelect)="onHorarioSeleccionado($event.data)">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Inicio</th>
-      <th>Fin</th>
-      <th>Duración</th>
-      <th>Médico</th>
-      <th>Registro</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-horario>
-    <tr [pSelectableRow]="horario">
-      <td>{{horario.tiempo_inicio}}</td>
-      <td>{{horario.tiempo_final}}</td>
-      <td>{{horario.duracion_cita}}</td>
-      <td>{{horario.medicoNombre}}</td>
-      <td>{{horario.medicoReg}}</td>
-    </tr>
-  </ng-template>
-</p-table>
-
-   
-
-  <!-- Formulario de cita -->
-   <div class="card flex flex-col gap-4">
-                    <div class="font-semibold text-xl"></div>
-                    <div class="flex flex-wrap gap-6">
-                        <div class="flex flex-col grow basis-0 gap-2">
-                          <label for="razon">Razón de la cita</label>
-                          <textarea rows="1" id="razon" pInputTextarea formControlName="razon"></textarea>
-                        </div>
-                        <div class="flex flex-col grow basis-0 gap-2">
-                            <label>Hora Inicio</label>
-                            <p-date-picker 
-                                formControlName="tiempo_inicio"
-                                [timeOnly]="true"
-                                hourFormat="24"
-                                (onSelect)="onHoraInicioSeleccionada($event)">
-                            </p-date-picker>
-                        </div>
-                        <div class="flex flex-col grow basis-0 gap-2">
-                            <label>Hora Fin</label>
-                            <input pInputText formControlName="tiempo_final" readonly />
-                        </div>
-                    </div>
-                </div>
-
-        <button pButton type="submit" label="Reservar" class="mt-3" [disabled]="!horarioSeleccionado || !formCita.get('fecha')?.value"></button>
-  </form>
-</div>
-<p-toast></p-toast>
+  <p-toast></p-toast>
 
 
 

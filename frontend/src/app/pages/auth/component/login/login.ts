@@ -40,7 +40,7 @@ export class Login {
           this.usuarioService.usuarioPorId(d.user.id).subscribe({
             next:u=>{
               if(u.perfil_paciente){
-                const sesion=new Sesion(d.user.name,d.user.rol,d.token,u.perfil_paciente.id);
+                const sesion=new Sesion(d.user.name,d.user.rol,d.token,u.id);
                 this.loginService.guardarToken(sesion);
                 this.router.navigateByUrl("/pages/paciente");
               }else if(u.perfil_medico){

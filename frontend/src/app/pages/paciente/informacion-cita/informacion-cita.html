@@ -1,0 +1,15 @@
+@if (cita) {
+  <p-card>
+  <ng-template pTemplate="title">Cita pendiente</ng-template>
+  <div>
+    <p><b>Fecha:</b> {{ cita.fecha }}</p>
+    <p><b>Hora:</b> {{ cita.tiempo_inicio }} - {{ cita.tiempo_final }}</p>
+    <p><b>Médico:</b> {{ cita.horario.medico.reg_profesional }} - {{ cita.horario.medico.biografia }}</p>
+    <p><b>Motivo:</b> {{ cita.razon }}</p>
+  </div>
+  <p-footer>
+    <button pButton label="Cancelar cita" class="p-button-danger" (click)="cancelarCita(cita.id)"></button>
+    <button pButton label="Generar boleta" class="p-button" (click)="generarBoleta()"></button>
+  </p-footer>
+</p-card>
+}

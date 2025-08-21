@@ -12,29 +12,42 @@
         }
 
                 <div class="flex flex-col md:flex-row gap-6">
-                    <div class="flex flex-wrap gap-2 w-full">
-                        <label for="nombre">Nombre</label>
-                        <input pInputText id="nombre" type="text" formControlName="dia_semana" />
+                    <div class="flex flex-col grow basis-0 gap-2">
+                        <label for="nombre">Dia de semana</label>
+                        <p-select id="nombre" [options]="diasSemana" formControlName="dia_semana" appendTo="body" optionValue="value" optionLabel="label" placeholder="Select One" class="w-full"></p-select>
+                    
                     </div>
-                    <div class="flex flex-wrap gap-2 w-full">
-                        <label for="descripcion">descripcion</label>
-                        <input pInputText id="descripcion" type="text" formControlName="tiempo_inicio" />
+                    <div class="flex flex-col grow basis-0 gap-2">
+                        <label>Tiempo de inicio</label>
+                        <p-date-picker 
+                                  formControlName="tiempo_inicio"
+                                  [timeOnly]="true"
+                                  hourFormat="24">
+                        </p-date-picker>
                     </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row gap-6">
-                    <div class="flex flex-wrap gap-2 w-full">
-                        <label for="nombre">Nombre</label>
-                        <input pInputText id="nombre" type="text" formControlName="tiempo_final" />
+                    <div class="flex flex-col grow basis-0 gap-2">
+                        <label>Tiempo de finalización</label>
+                        <p-date-picker 
+                                  formControlName="tiempo_final"
+                                  [timeOnly]="true"
+                                  hourFormat="24">
+                        </p-date-picker>
                     </div>
-                    <div class="flex flex-wrap gap-2 w-full">
-                        <label for="descripcion">descripcion</label>
-                        <input pInputText id="descripcion" type="text" formControlName="duracion_cita" />
+                    <div class="flex flex-col grow basis-0 gap-2">
+                        <label>Duración</label>
+                        <p-date-picker 
+                                  formControlName="duracion_cita"
+                                  [timeOnly]="true"
+                                  hourFormat="24">
+                        </p-date-picker>
                     </div>
                 </div>
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="flex flex-wrap gap-2 w-full">
-                        <label for="nombre">Nombre</label>
+                        <label for="nombre">Medico</label>
                         <input pInputText id="nombre" type="text" formControlName="medico_id" />
                     </div>
                 </div>

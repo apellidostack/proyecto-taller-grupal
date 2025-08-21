@@ -20,7 +20,7 @@
   <ng-template #body let-cita>
     <tr>
       <td>{{ cita.id }}</td>
-      <td>{{ cita.fecha }}</td>
+      <td>{{ cita.fecha | date:'fullDate'}}</td>
       <td>{{ cita.tiempo_inicio }}</td>
       <td>{{ cita.tiempo_final }}</td>
       <td>{{ cita.razon }}</td>
@@ -45,7 +45,7 @@
 >
 @if (selectedCita) {
   <form [formGroup]="formGroup" (ngSubmit)="editarHistorial()">
-    <p><b>Fecha:</b> {{ selectedCita.fecha }}</p>
+    <p><b>Fecha:</b> {{ selectedCita.fecha | date:'fullDate'}}</p>
     <p><b>Razón:</b> {{ selectedCita.razon }}</p>
     <p><b>Paciente:</b> {{ nombrePaciente || 'Cargando...' }}</p>
     <div class="flex flex-col grow basis-0 gap-2">
